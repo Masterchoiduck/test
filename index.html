@@ -21,8 +21,8 @@
       ctx.fillStyle = "#12bbFF";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = "black";
-      ctx.fillRect(10, 20, 50, 50);
+      // ctx.fillStyle = "black";
+      // ctx.fillRect(10, 20, 50, 50);
 
       // 캐릭터 js object
       let image1 = new Image();
@@ -78,7 +78,7 @@
       function frameAnimation() {
         requestAnimationFrame(frameAnimation);
       }
-      frameAnimation();
+      // frameAnimation();
       // FPS animation
       let timer = 0;
       let villains = [];
@@ -120,26 +120,26 @@
         } else if (e.code === "ArrowRight") {
           right = true;
         }
+        if (up) {
+          up = false;
+          character.y -= 7;
+        }
+        if (down) {
+          down = false;
+          character.y += 7;
+        }
+        if (left) {
+          left = false;
+          character.x -= 7;
+        }
+        if (right) {
+          right = false;
+          character.x += 7;
+        }
+        character.draw();
+        if (timer == 5000) cancelAnimationFrame(animation);
       });
       //
-      if (up) {
-        up = false;
-        character.y -= 7;
-      }
-      if (down) {
-        down = false;
-        character.y += 7;
-      }
-      if (left) {
-        left = false;
-        character.x -= 7;
-      }
-      if (right) {
-        right = false;
-        character.x += 7;
-      }
-      character.draw();
-      if (timer == 5000) cancelAnimationFrame(animation);
       frameAnimation();
       //
       villains.forEach((object, index, array) => {
