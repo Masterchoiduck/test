@@ -26,10 +26,10 @@
 
       // 캐릭터 js object
       let image1 = new Image();
-      image1.src = "햄토리.jpg";
+      // image1.src = "햄토리.jpg";
 
       let image2 = new Image();
-      image2.src = "고양이.jpg";
+      // image2.src = "고양이.jpg";
 
       let character = {
         x: 10,
@@ -45,15 +45,15 @@
       character.draw();
 
       //image load 후 draw
-      function drawOnImage(image, x, y, w, h) {
-        image.onload = function () {
-          ctx.drawImage(image, x, y, w, h);
+      function drawOnImage(image1, x, y, w, h) {
+        image1.onload = function () {
+          ctx.drawImage(image1, x, y, w, h);
         };
       }
       //villain
       class Villain {
         constructor() {
-          this.x = 300;
+          this.x = 3000;
           this.y = Math.floor(Math.random() * 1000) + 1; //200;
           this.width = 50;
           this.height = 50;
@@ -63,10 +63,11 @@
           else if (this.y >= canvas.height - 100) this.y -= 500;
           ctx.fillStyle = "red";
           ctx.fillRect(this.x, this.y, this.width, this.height);
-          //drawOnImage(image2, this.x, this.y, this.width, this.height);
+          drawOnImage(image2, this.x, this.y, this.width, this.height);
           ctx.drawImage(image2, this.x, this.y, this.width, this.height);
         }
       }
+      
       let v1 = new Villain();
       v1.draw();
       //image load 후 draw
@@ -76,6 +77,7 @@
         };
       }
       function frameAnimation() {
+        cancelAnimationFrame(requestID);
         requestAnimationFrame(frameAnimation);
       }
       // frameAnimation();
@@ -93,21 +95,23 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         if (timer % 30 === 0) {
-          let villainNew = new villain();
+          let villainNew = new Villain()
           villains.push(villainNew);
         }
         villains.forEach((object, index, array) => {
-          if (object.x < 0) {
-            array.splicce(index, 1);
-          }
-          object.x -= 2;
-          //실시간 충돌 감지
-          object.draw();
-        });
+        if (object.x < 0) {
+          array.splice(index, 1);
+        }
+        object.x -= 2;
+        //실시간 충돌 감지
+        checkCollision(character, object);
+
+        object.draw();
+      });
         character.draw();
       }
       frameAnimation();
-
+    
       // key event
       document.addEventListener("keydown", (e) => {
         console.log(e.code);
@@ -139,27 +143,24 @@
         character.draw();
         if (timer == 5000) cancelAnimationFrame(animation);
       });
-      //
-      frameAnimation();
-      //
-      villains.forEach((object, index, array) => {
-        if (abject.x < 0) {
-          array.splice(index, 1);
-        }
-        object.x -= 2;
 
-        //실시간 충돌 감지
-        checkCollision(character, object);
-
-        object.draw();
-      });
+      
 
       //check collision
       function checkCollision(character, villain) {
+
         let collsion = false;
         if (
-          ((villain.x <= character.x && character.x <= villain.x + 50) || (villain.x <= character.x + 50 && character.x + 50 <= villain.x + 50)) &&
-          ((villain.y <= character.y && character.y <= villain.y + 50) || (villain.y <= character.y + 50 && character.y + 50 <= villain.y + 50))
+          (
+            (villain.x <= character.x && character.x <= villain.x + 50) 
+            ||
+           (villain.x <= character.x + 50 && character.x + 50 <= villain.x + 50))
+        &&
+          (
+            (villain.y <= character.y && character.y <= villain.y + 50) 
+            ||
+            (villain.y <= character.y + 50 && character.y + 50 <= villain.y + 50)
+          )
         ) {
           collsion = true;
         }
