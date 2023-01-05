@@ -8,8 +8,16 @@
   </head>
   <body>
     <canvas id="canvas" style="background-color: #1979ff"></canvas>
-
+    <!-- <img src="미니언즈.jpg"> -->
     <script>
+      let mouseX,mouseY =0
+  
+      document.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        console.log(mouseX);
+        console.log(mouseY);
+      })
       const canvas = document.getElementById("canvas");
       let ctx = canvas.getContext("2d");
 
@@ -26,10 +34,12 @@
 
       // 캐릭터 js object
       let image1 = new Image();
-      // image1.src = "햄토리.jpg";
+      image1.src = '미니언즈.jpg';
+      console.log(image1);
 
       let image2 = new Image();
-      // image2.src = "고양이.jpg";
+      image2.src = "고양이.jpg";
+      console.log(image2);
 
       let character = {
         x: 10,
@@ -37,19 +47,43 @@
         width: 50,
         height: 50,
         draw() {
-          ctx.fillStyle = "green";
+          ctx.fillStyle = "red";
           ctx.fillRect(this.x, this.y, this.width, this.height);
           drawOnImage(image1, this.x, this.y, this.width, this.height);
         },
       };
-      character.draw();
+      // character.draw();
+
+      let character2 = {
+        x: 200,
+        y: 200,
+        width: 50,
+        height: 50,
+        draw2() {
+          ctx.fillStyle = "green";
+          ctx.fillRect(this.x, this.y, this.width, this.height);
+          drawOnImage2(image1, this.x, this.y, this.width, this.height);
+          // console.log(`Y : ${mouseX} --${character2.x}`);
+          // console.log(`X : ${mouseY} --${character2.y}`);
+        },
+      };
+      // character2.draw2();
 
       //image load 후 draw
-      function drawOnImage(image1, x, y, w, h) {
-        image1.onload = function () {
-          ctx.drawImage(image1, x, y, w, h);
+      function drawOnImage(image, x, y, w, h) {
+        image.onload = function () {
+          // ctx.drawImage(image, x, y, w, h);
+          ctx.drawImage(image, this.x, this.y, this.width, this.height);
         };
       }
+
+      function drawOnImage2(image, x, y, w, h) {
+        image.onload = function () {
+          // ctx.drawImage(image, x, y, w, h);
+          ctx.drawImage(image, this.x, this.y, this.width, this.height);
+        };
+      }
+
       //villain
       class Villain {
         constructor() {
@@ -63,7 +97,7 @@
           else if (this.y >= canvas.height - 100) this.y -= 500;
           ctx.fillStyle = "red";
           ctx.fillRect(this.x, this.y, this.width, this.height);
-          drawOnImage(image2, this.x, this.y, this.width, this.height);
+          // drawOnImage(image2, this.x, this.y, this.width, this.height);
           ctx.drawImage(image2, this.x, this.y, this.width, this.height);
         }
       }
@@ -109,6 +143,7 @@
         object.draw();
       });
         character.draw();
+        character2.draw2();
       }
       frameAnimation();
     
@@ -141,7 +176,9 @@
           character.x += 7;
         }
         character.draw();
-        if (timer == 5000) cancelAnimationFrame(animation);
+        character2.draw2();
+        console.log(timer);
+        if (timer > 5000) cancelAnimationFrame(animation);
       });
 
       
